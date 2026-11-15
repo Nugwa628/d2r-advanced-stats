@@ -105,7 +105,7 @@ Switching (live, with the sheet open or closed):
   mode a click switches to) in the top-right corner of the page. A click flips the setting and writes `tabs` back to
   statbook.toml (the rest of the file is kept).
 - The Controls action "Stat Book: Top/Side Tabs" (unbound by default: bind it in Options > Controls; it is listed in the
-  category "D2R-XL 2012").
+  category "Advanced Stats").
 - Console: `statbook tabs [top|side|toggle]`.
 - D2R's Options menu has no plugin API, so the setting has no entry there.
 

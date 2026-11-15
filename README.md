@@ -94,7 +94,7 @@ pad_log = false         # log every controller action the gamepad menu gets to s
 ```
 
 **Controls:** the action "Stat Book: Top/Side Tabs" switches the tabs. It is unbound by default; bind a key in
-Options > Controls (it is listed in the category "D2R-XL 2012").
+Options > Controls (it is listed in the category "Advanced Stats").
 
 The plugin writes its log to `statbook.log` in `d2rloader\logs\`. D2RLoader's console has the command `statbook` (status),
 `statbook page <n>` (a page's lines with your values) and `statbook tabs top|side|toggle`.

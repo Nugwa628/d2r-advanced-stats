@@ -35,7 +35,7 @@
 
 namespace {
 
-constexpr const char* PluginVersion = "0.1.0";
+constexpr const char* PluginVersion = "0.1.1";
 constexpr uint32_t SupportedImage = 0x6ab3782cU;
 
 constexpr D2RL::PluginInfo Info{
@@ -425,7 +425,7 @@ void SayPage(const D2RL::ConsoleCommandContext* command, int page) {
 
 // ---- top / side tabs: the book's toggle button, the Controls action, `statbook tabs` -------------------------------------------
 // D2R's Options menu has no plugin API (D2R-XL 2012's docs/legacy-hd-text-research.md section 3), so the setting is switched in the game by the
-// toggle on the book and by the rebindable action "Stat Book: Top/Side Tabs" (Options > Controls, category D2R-XL 2012), and
+// toggle on the book and by the rebindable action "Stat Book: Top/Side Tabs" (Options > Controls, category Advanced Stats), and
 // written back to statbook.toml ([statbook] tabs) so it holds for the next game.
 
 std::atomic<long> g_tabsWrites{0}, g_tabsWriteFails{0}, g_tabsActions{0};
@@ -478,7 +478,7 @@ void RegisterTabsAction(const D2RL::PluginContext* context) noexcept {
 	    .flags = 0,
 	    .logicalId = "mxl_statbook_tabs",
 	    .displayName = "Stat Book: Top/Side Tabs",
-	    .category = "D2R-XL 2012",
+	    .category = "Advanced Stats",
 	    .defaultPrimary = {.key = D2RL::Input::Key::None, .modifier = D2RL::Input::Modifier::None},
 	    .defaultSecondary = {.key = D2RL::Input::Key::None, .modifier = D2RL::Input::Modifier::None},
 	    .callback = &OnTabsAction,

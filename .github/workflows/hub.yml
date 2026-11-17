@@ -1,0 +1,46 @@
+name: Upload to the D2RLoader Plugin Hub
+
+# A published GitHub release goes to the D2RLoader Plugin Hub with the release's own zip and notes.
+# Re-run for an existing tag with "Run workflow" (tag, e.g. v0.1.2).
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to upload (e.g. v0.1.2)
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch the release zip and notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
+        run: |
+          set -euo pipefail
+          for i in 1 2 3 4 5 6; do
+            if gh release download "$TAG" -R "$GITHUB_REPOSITORY" -p 'd2r-advanced-stats-*.zip' -O plugin.zip --clobber; then break; fi
+            echo "zip not attached yet, waiting"; sleep 20
+          done
+          test -s plugin.zip
+          gh release view "$TAG" -R "$GITHUB_REPOSITORY" --json body -q .body > changelog.md
+          echo "VERSION=${TAG#v}" >> "$GITHUB_ENV"
+
+      - name: Upload the release
+        env:
+          D2RLOADER_TOKEN: ${{ secrets.D2RLOADER_TOKEN }}
+          PLUGIN_ID: 1ba02fc2-4e47-4833-8ddf-30f3c832a7bb
+        run: |
+          set -euo pipefail
+          DETAILS=$(jq -cn --arg version "$VERSION" --rawfile changelog changelog.md '{version: $version, changelog: $changelog}')
+          curl --fail-with-body --silent --show-error \
+            --request POST "https://d2rloader.net/api/v1/hub/plugins/$PLUGIN_ID/releases?consent=1" \
+            --header "Authorization: Bearer $D2RLOADER_TOKEN" \
+            --form-string "details=$DETAILS" \
+            --form "file=@plugin.zip"
